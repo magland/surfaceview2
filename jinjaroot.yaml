@@ -1,0 +1,8 @@
+projectName: surfaceview2
+pythonProjectVersion: 0.1.0
+webAppProjectVersion: 0.1.0
+projectAuthor: Jeremy Magland
+projectAuthorEmail: jmagland@flatironinstitute.org
+projectDescription: Web app for viewing 3D surfaces and vector fields
+projectUrl: https://github.com/magland/surfaceview2
+projectBugTrackerUrl: https://github.com/magland/surfaceview2/issues

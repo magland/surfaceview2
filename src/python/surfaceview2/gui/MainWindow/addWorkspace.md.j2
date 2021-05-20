@@ -1,0 +1,12 @@
+To add a workspace, run the following Python script on the computer where the backend provider is running:
+
+```python
+import {{ projectName }}
+
+# replace "new-workspace" with the name of the new workspace
+new_workspace_name = 'new-workspace'
+
+workspace_list = {{ projectName }}.WorkspaceList(backend_uri='{backendUri}')
+new_workspace = {{ projectName }}.create_workspace()
+workspace_list.add_workspace(name=new_workspace_name, workspace=new_workspace)
+```
