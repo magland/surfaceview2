@@ -50,6 +50,7 @@ class Surface:
         # vertices: n x 3
         # faces: m
         # ifaces: k
+        print(vertices.shape)
         assert vertices.shape[1] == 3
         return Surface({
             'surface_format': 'pkl_v1',
@@ -68,7 +69,7 @@ class Surface:
         vtk_path = kp.load_file(vtk_uri)
         if vtk_path is None: raise Exception(f'Unable to load file: {vtk_uri}')
         x = vtk_to_mesh_dict(vtk_path, format='UnstructuredGrid', base64=False)
-        vertices = np.array(x['vertices'], dtype=np.float32)
+        vertices = np.array(x['vertices'], dtype=np.float32).T
         faces = np.array(x['faces'], dtype=np.int32)
         ifaces = np.array(x['ifaces'], dtype=np.int32)
         return Surface.from_numpy(vertices=vertices, faces=faces, ifaces=ifaces)

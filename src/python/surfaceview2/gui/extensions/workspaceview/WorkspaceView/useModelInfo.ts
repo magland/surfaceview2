@@ -6,13 +6,21 @@ type SurfaceInfo = {
     numFaces: number
 }
 
+type VectorField3DInfo = {
+    uri: string
+    nx: number
+    ny: number
+    nz: number
+    dim: number
+}
+
 export type ModelInfo = {
     surfaces: {[key: string]: SurfaceInfo}
+    vectorfield3ds: {[key: string]: VectorField3DInfo}
 }
 
 const useModelInfo = (modelUri: string | undefined) => {
-    console.log('---', modelUri)
-    const {returnValue: modelInfo, task} = useTask<ModelInfo>(modelUri ? 'get_model_info.4' : '', {model_uri: modelUri})
+    const {returnValue: modelInfo, task} = useTask<ModelInfo>(modelUri ? 'get_model_info.6' : '', {model_uri: modelUri})
     return {modelInfo, task}
 }
 

@@ -20,6 +20,15 @@ const useWorkspaceRoute = () => {
                     workspaceUri
                 }
             }
+            else if (p[4] === 'vectorField3D') {
+                const vectorField3DName = p[5]
+                return {
+                    page: 'modelVectorField3D',
+                    modelId,
+                    vectorField3DName,
+                    workspaceUri
+                }
+            }
             else {
                 return {
                     page: 'model',
@@ -44,6 +53,9 @@ const useWorkspaceRoute = () => {
         }
         else if (action.type === 'gotoModelSurfacePage') {
             setRoute({routePath: `/workspace/model/${action.modelId}/surface/${action.surfaceName}`})
+        }
+        else if (action.type === 'gotoModelVectorField3DPage') {
+            setRoute({routePath: `/workspace/model/${action.modelId}/vectorField3D/${action.vectorField3DName}`})
         }
     }, [setRoute])
 

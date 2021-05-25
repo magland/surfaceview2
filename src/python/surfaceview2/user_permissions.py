@@ -1,6 +1,7 @@
 from typing import Union
 import kachery_p2p as kp
 from .package_name import package_name
+from .workspace.workspace import parse_workspace_uri
 
 
 key = f'_{package_name}_user_permissions'
@@ -26,6 +27,10 @@ def set_user_feed_permissions(user_id: str, *, feed_id: str, append: Union[None,
     p_user['feeds'] = feeds
     p[user_id] = p_user
     kp.set(key, p)
+
+def set_user_workspace_permissions(user_id: str, *, workspace_uri: str, append: Union[None, bool]=None):
+    feed_id, query_string = parse_workspace_uri(workspace_uri)
+    set_user_feed_permissions(user_id, feed_id=feed_id, append=append)
 
 def get_user_permissions_dict(user_id: str):
     p = kp.get(key)

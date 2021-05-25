@@ -1,7 +1,6 @@
-## Welcome to surfaceview2!
+This web app allows you to interactively view 3D vector fields and surfaces embedded in 3D, and to share those views with colleagues. It is intended to be used with the [miniwasp](https://github.com/mrachh/miniwasp) project for simulating the optics of the eye of a mini wasp.
 
-This web app allows you to interactively view and share 3D surfaces and vector fields.
+This app is self-documenting, although the documentation is still work-in-progress. If documentation is found to be incomplete or usage is unclear, contact Jeremy or submit an issue to the [github repository](https://github.com/magland/surfaceview2).
 
-The frontend (GUI) and backend (compute engine) are decoupled, allowing you to view your own data without uploading to our servers. You can also share visualizations with remote collaborators.
 
 [//]: # "jinjaroot synctool exclude"

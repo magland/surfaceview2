@@ -33,7 +33,7 @@ const deserializeReturnValue = (x: any): any => {
     else return x
 }
 
-const applyShape = (x: Float32Array | Int32Array | Int16Array, shape: number[]): number[] | number[][] => {
+const applyShape = (x: Float32Array | Int32Array | Int16Array, shape: number[]): number[] | number[][] | number[][][] | number[][][][] | number[][][][][] => {
     if (shape.length === 1) {
         if (shape[0] !== x.length) throw Error('Unexpected length of array')
         return Array.from(x)
@@ -45,6 +45,66 @@ const applyShape = (x: Float32Array | Int32Array | Int16Array, shape: number[]):
         const ret: number[][] = []
         for (let i1 = 0; i1 < n1; i1++) {
             ret.push(Array.from(x.slice(i1 * n2, (i1 + 1) * n2)))
+        }
+        return ret
+    }
+    else if (shape.length === 3) {
+        const n1 = shape[0]
+        const n2 = shape[1]
+        const n3 = shape[2]
+        if (n1 * n2 * n3 !== x.length) throw Error('Unexpected length of array')
+        const ret: number[][][] = []
+        for (let i1 = 0; i1 < n1; i1++) {
+            const A: number[][] = []
+            for (let i2 = 0; i2 < n2; i2++) {
+                A.push(Array.from(x.slice(i1 * n2 * n3 + i2 * n3, i1 * n2 * n3 + ( i2 + 1 ) * n3)))
+            }
+            ret.push(A)
+        }
+        return ret
+    }
+    else if (shape.length === 4) {
+        const n1 = shape[0]
+        const n2 = shape[1]
+        const n3 = shape[2]
+        const n4 = shape[3]
+        if (n1 * n2 * n3 * n4 !== x.length) throw Error('Unexpected length of array')
+        const ret: number[][][][] = []
+        for (let i1 = 0; i1 < n1; i1++) {
+            const A: number[][][] = []
+            for (let i2 = 0; i2 < n2; i2++) {
+                const B: number[][] = []
+                for (let i3 = 0; i3 < n3; i3++) {
+                    B.push(Array.from(x.slice(i1 * n2 * n3 * n4 + i2 * n3 * n4 + i3 * n4, i1 * n2 * n3 * n4 + i2 * n3 * n4 + ( i3 + 1 ) * n4)))
+                }
+                A.push(B)
+            }
+            ret.push(A)
+        }
+        return ret
+    }
+    else if (shape.length === 5) {
+        const n1 = shape[0]
+        const n2 = shape[1]
+        const n3 = shape[2]
+        const n4 = shape[3]
+        const n5 = shape[4]
+        if (n1 * n2 * n3 * n4 * n5 !== x.length) throw Error('Unexpected length of array')
+        const ret: number[][][][][] = []
+        for (let i1 = 0; i1 < n1; i1++) {
+            const A: number[][][][] = []
+            for (let i2 = 0; i2 < n2; i2++) {
+                const B: number[][][] = []
+                for (let i3 = 0; i3 < n3; i3++) {
+                    const C: number[][] = []
+                    for (let i4 = 0; i4 < n4; i4++) {
+                        C.push(Array.from(x.slice(i1 * n2 * n3 * n4 * n5 + i2 * n3 * n4 * n5 + i3 * n4 * n5 + i4 * n5, i1 * n2 * n3 * n4 * n5 + i2 * n3 * n4 * n5 + i3 * n4 * n5 + (i4 + 1) * n5)))
+                    }
+                    B.push(C)
+                }
+                A.push(B)
+            }
+            ret.push(A)
         }
         return ret
     }

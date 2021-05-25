@@ -176,7 +176,7 @@ def example6_hither():
     xs = np.linspace(xmin+0.1*dx,xmax-0.1*dx,nx)
     ys = np.linspace(ymin+0.1*dy,ymax-0.1*dy,ny)
     zs = np.linspace(zmin+0.1*dz,zmax-0.1*dz,nz)
-    xx,yy,zz = np.meshgrid(xs,ys,zs)
+    xx,yy,zz = np.meshgrid(xs,ys,zs, indexing='ij')
 
     nt = nx*ny*nz
     targs = np.zeros((3,nt),order="F")
@@ -199,6 +199,9 @@ def example6_hither():
 
     print('Returning results')
     return {
-        'E': E,
-        'H': H
+        'xgrid': xs,
+        'ygrid': ys,
+        'zgrid': zs,
+        'E': E.reshape((3, len(xs), len(ys), len(zs))),
+        'H': H.reshape((3, len(xs), len(ys), len(zs)))
     }

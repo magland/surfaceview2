@@ -1,8 +1,8 @@
 import QueryString from 'querystring'
 
-type Page = 'main' | 'model' | 'modelSurface'
+type Page = 'main' | 'model' | 'modelSurface' | 'modelVectorField3D'
 export const isWorkspacePage = (x: string): x is Page => {
-    return ['main', 'model', 'modelSurface'].includes(x)
+    return ['main', 'model', 'modelSurface', 'modelVectorField3D'].includes(x)
 }
 
 type WorkspaceMainRoute = {
@@ -20,7 +20,13 @@ type WorkspaceModelSurfaceRoute = {
     modelId: string
     surfaceName: string
 }
-export type WorkspaceRoute = WorkspaceMainRoute | WorkspaceModelRoute | WorkspaceModelSurfaceRoute
+type WorkspaceModelVectorField3DRoute = {
+    workspaceUri?: string
+    page: 'modelVectorField3D'
+    modelId: string
+    vectorField3DName: string
+}
+export type WorkspaceRoute = WorkspaceMainRoute | WorkspaceModelRoute | WorkspaceModelSurfaceRoute | WorkspaceModelVectorField3DRoute
 type GotoMainPageAction = {
     type: 'gotoMainPage'
 }
@@ -33,7 +39,12 @@ type GotoModelSurfacePageAction = {
     modelId: string
     surfaceName: string
 }
-export type WorkspaceRouteAction = GotoMainPageAction | GotoModelPageAction | GotoModelSurfacePageAction
+type GotoModelVectorField3DPageAction = {
+    type: 'gotoModelVectorField3DPage'
+    modelId: string
+    vectorField3DName: string
+}
+export type WorkspaceRouteAction = GotoMainPageAction | GotoModelPageAction | GotoModelSurfacePageAction | GotoModelVectorField3DPageAction
 export type WorkspaceRouteDispatch = (a: WorkspaceRouteAction) => void
 
 export interface LocationInterface {
@@ -70,6 +81,14 @@ export const routeFromLocation = (location: LocationInterface): WorkspaceRoute =
                     surfaceName: pathList[4]
                 }
             }
+            else if (pathList[3] === 'vectorField3D') {
+                return {
+                    workspaceUri,
+                    page: 'modelVectorField3D',
+                    modelId,
+                    vectorField3DName: pathList[4]
+                }
+            }
             else {
                 return {
                     workspaceUri,
@@ -97,6 +116,10 @@ export const locationFromRoute = (route: WorkspaceRoute) => {
         }
         case 'modelSurface': return {
             pathname: `/model/${route.modelId}/surface/${route.surfaceName}`,
+            search: queryString(queryParams)
+        }
+        case 'modelVectorField3D': return {
+            pathname: `/model/${route.modelId}/vectorField3D/${route.vectorField3DName}`,
             search: queryString(queryParams)
         }
         default: return {
@@ -132,6 +155,12 @@ export const workspaceRouteReducer = (s: WorkspaceRoute, a: WorkspaceRouteAction
             page: 'modelSurface',
             modelId: a.modelId,
             surfaceName: a.surfaceName,
+            workspaceUri: s.workspaceUri
+        }; break;
+        case 'gotoModelVectorField3DPage': newRoute = {
+            page: 'modelVectorField3D',
+            modelId: a.modelId,
+            vectorField3DName: a.vectorField3DName,
             workspaceUri: s.workspaceUri
         }; break;
     }

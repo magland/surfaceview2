@@ -1,10 +1,12 @@
 import { Button } from '@material-ui/core';
 import React, { FunctionComponent, useCallback } from 'react';
-import Splitter from '../../../commonComponents/Splitter/Splitter';
+import MarkdownDialog from '../../../commonComponents/Markdown/MarkdownDialog';
 import { useVisible } from '../../../labbox';
+import ModalWindow from '../../../labbox/ApplicationBar/ModalWindow';
 import { WorkspaceViewProps } from '../../../pluginInterface/WorkspaceViewPlugin';
 import AddModelInstructions from './AddModelInstructions';
 import ModelsTable from './ModelsTable';
+import workspacePermissionsMd from './workspacePermissions.md.gen';
 
 export interface LocationInterface {
   pathname: string
@@ -23,32 +25,71 @@ const ModelsView: FunctionComponent<WorkspaceViewProps> = ({ workspace, workspac
         modelId
       })
   }, [workspaceRouteDispatch])
-  const {visible: instructionsVisible, show: showInstructions} = useVisible()
+  
+  const {visible: addModelInstructionsVisible, show: showAddModelInstructions, hide: hideAddModelInstructions} = useVisible()
+  const {visible: workspaceSettingsVisible, show: showWorkspaceSettings, hide: hideWorkspaceSettings} = useVisible()
+
+  const handleDeleteModels = useCallback((modelIds: string[]) => {
+    workspaceDispatch && workspaceDispatch({
+      type: 'deleteModels',
+      modelIds
+    })
+}, [workspaceDispatch])
+
+  const readOnly = workspaceDispatch ? false : true
+
   return (
-    <Splitter
-            {...{width, height}}
-            initialPosition={300}
-            positionFromRight={true}
-    >
+    <div>
       <div>
-          {
-              !instructionsVisible && (
-                  <div><Button onClick={showInstructions}>Add model</Button></div>
-              )
-          }
-          <ModelsTable
+        <div><Button onClick={showAddModelInstructions}>Add model</Button></div>
+        <div><Button onClick={showWorkspaceSettings}>Set workspace permissions</Button></div>
+        <ModelsTable
             models={workspace.models}
             onModelSelected={handleModelSelected}
-          />
+            onDeleteModels={readOnly ? undefined : handleDeleteModels}
+        />
       </div>
-      {
-          instructionsVisible && (
-              <AddModelInstructions />
-          )
-      }
-      
-    </Splitter>
+      <ModalWindow
+            open={addModelInstructionsVisible}
+            onClose={hideAddModelInstructions}
+        >
+          <AddModelInstructions />
+      </ModalWindow>
+      <MarkdownDialog
+        visible={workspaceSettingsVisible}
+        onClose={hideWorkspaceSettings}
+        source={workspacePermissionsMd}
+        substitute={{workspaceUri: workspaceRoute.workspaceUri}}
+      />
+    </div>
   )
+
+
+  // return (
+  //   <Splitter
+  //           {...{width, height}}
+  //           initialPosition={300}
+  //           positionFromRight={true}
+  //   >
+  //     <div>
+  //         {
+  //             !instructionsVisible && (
+  //                 <div><Button onClick={showInstructions}>Add model</Button></div>
+  //             )
+  //         }
+  //         <ModelsTable
+  //           models={workspace.models}
+  //           onModelSelected={handleModelSelected}
+  //         />
+  //     </div>
+  //     {
+  //         instructionsVisible && (
+  //             <AddModelInstructions />
+  //         )
+  //     }
+      
+  //   </Splitter>
+  // )
 }
 
 export default ModelsView

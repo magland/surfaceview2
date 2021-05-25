@@ -13,6 +13,9 @@ export type WorkspaceAction = {
     modelId: string
     label: string
     uri: string
+} | {
+    type: 'deleteModels'
+    modelIds: string[]
 }
 
 const workspaceReducer = (s: WorkspaceState, a: WorkspaceAction): WorkspaceState => {
@@ -22,6 +25,9 @@ const workspaceReducer = (s: WorkspaceState, a: WorkspaceAction): WorkspaceState
             ...s,
             models: [...s.models, {modelId: a.modelId, uri: a.uri, label: a.label}]
         }
+    }
+    else if (a.type === 'deleteModels') {
+        return {...s, models: s.models.filter(x => (!(a.modelIds.includes(x.modelId))))}
     }
     return s
 }

@@ -16,7 +16,6 @@ type Props = {
 
 const SurfaceView: FunctionComponent<Props> = ({surfaceData}) => {
     const [options, setOptions] = useState<SurfaceViewOptions>({showWireframe: true, showMesh: true})
-    console.log('---- surface data', surfaceData)
     return (
         <Splitter
             width={700}

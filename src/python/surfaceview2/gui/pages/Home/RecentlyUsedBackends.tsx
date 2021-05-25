@@ -11,7 +11,7 @@ const RecentlyUsedBackends: FunctionComponent<Props> = ({onSelectBackend}) => {
     const backendItems = loadBackendItems()
     return (
         backendItems.length > 0 ? (
-            <p>Recently used backends: {backendItems.map(x => (<span><Hyperlink onClick={() => {onSelectBackend(x.uri)}}>{x.label}</Hyperlink>&nbsp;</span>))}</p>
+            <p>Recently used backends: {backendItems.map(x => (<span key={x.uri}><Hyperlink onClick={() => {onSelectBackend(x.uri)}}>{x.label}</Hyperlink>&nbsp;</span>))}</p>
         ) : <span />
     )
 }

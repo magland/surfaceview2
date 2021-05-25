@@ -3,6 +3,7 @@ import { WorkspaceViewProps } from '../../../pluginInterface/WorkspaceViewPlugin
 import ModelsView from './ModelsView';
 import ModelView from './ModelView';
 import ModelSurfaceView from './ModelSurfaceView'
+import ModelVectorField3DView from './ModelVectorField3DView';
 
 export interface LocationInterface {
   pathname: string
@@ -26,6 +27,13 @@ const WorkspaceView: FunctionComponent<WorkspaceViewProps> = ({ workspace, works
     return (
       <ModelSurfaceView
         {...{modelId: workspaceRoute.modelId, surfaceName: workspaceRoute.surfaceName, workspace, workspaceDispatch, workspaceRoute, workspaceRouteDispatch, width, height}}
+      />
+    )
+  }
+  else if (workspaceRoute.page === 'modelVectorField3D') {
+    return (
+      <ModelVectorField3DView
+        {...{modelId: workspaceRoute.modelId, vectorField3DName: workspaceRoute.vectorField3DName, workspace, workspaceDispatch, workspaceRoute, workspaceRouteDispatch, width, height}}
       />
     )
   }

@@ -93,7 +93,7 @@ const BackendProvidersTable: FunctionComponent<Props> = ({selectedBackendProvide
                         columns={columns}
                         rows={rows}
                         selectionMode={"single"}
-                        selectedRowKeys={selectedBackendProviderUri ? {[selectedBackendProviderUri]: true} : {}}
+                        selectedRowKeys={selectedBackendProviderUri ? [selectedBackendProviderUri] : []}
                         onSelectedRowKeysChanged={handleSelectedRowKeysChanged}
                     />
                 )
