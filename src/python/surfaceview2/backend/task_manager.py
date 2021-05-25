@@ -2,7 +2,7 @@ import time
 import json
 from typing import Callable, Dict
 import hither2 as hi
-from ._common import _upload_to_google_cloud
+from ._common import _upload_json_to_google_cloud, _pathify_hash
 from ._serialize import _serialize
 
 job_handler = hi.ParallelJobHandler(4)
@@ -79,14 +79,11 @@ class Task:
                 print('WARNING: Problem serializing return value', e)
                 return
             try:
-                _upload_to_google_cloud(self._google_bucket_name, f'task_results/{_pathify_hash(self._task_hash)}', json.dumps(return_value_serialized).encode('utf-8'))
+                _upload_json_to_google_cloud(self._google_bucket_name, f'task_results/{_pathify_hash(self._task_hash)}', return_value_serialized)
             except Exception as e:
                 print('WARNING: Problem uploading return value to cloud', e)
                 return
         self._on_publish_message(msg)
-
-def _pathify_hash(x: str):
-    return f'{x[0]}{x[1]}/{x[2]}{x[3]}/{x[4]}{x[5]}/{x}'
 
 task_timeout_sec = 60 * 3
 
@@ -95,6 +92,8 @@ class TaskManager:
         self._tasks: Dict[str, Task] = {}
         self._on_publish_message = on_publish_message
         self._google_bucket_name = google_bucket_name
+    def cleanup(self):
+        pass
     def add_task(self, task_hash: str, task_data: dict, job: hi.Job):
         if task_hash in self._tasks:
             self._tasks[task_hash]._publish_status_update() # do this so the requester knows that it is already running

@@ -34,24 +34,28 @@ RUN apt update && apt install -y liblapack-dev libopenblas-dev
 # python dependencies for hither
 RUN pip install click simplejson requests
 
-# FMM3D - 4/21/21
+# FMM3D - 5/24/21
 RUN git clone https://github.com/flatironinstitute/FMM3D /repos/FMM3D \
     && cd /repos/FMM3D \
-    && git checkout f2bbe71529d25441d805f3246860411a9a97b3c0 \
+    && git checkout 3552b89086d8df5c3c235a29608e0b973a3206f0 \
     && make install
 RUN cd /repos/FMM3D && make python
 
-# fmm3dbie - 5/19/21
+# fmm3dbie - 5/24/21
 RUN git clone https://gitlab.com/fastalgorithms/fmm3dbie /repos/fmm3dbie \
     && cd /repos/fmm3dbie \
     && git checkout 3d8ff177b795d148840f28456253d281f2960928 \
     && make install
 RUN cd /repos/fmm3dbie && make python
 
-# miniwasp - 5/19/21
+# miniwasp - 5/24/21
 RUN git clone https://github.com/mrachh/miniwasp /repos/miniwasp \
     && cd /repos/miniwasp \
-    && git checkout 181ea8b444e1011de0053d5e5a1883e07612a067 \
+    && git checkout 97fd0d405d76277d72f6c0f73fe62de1087993ec \
     && make python
 
-LABEL version="0.1.3"
+COPY test_data /test_data
+ENV TEST_DATA_DIR=/test_data
+
+
+LABEL version="0.1.5"
