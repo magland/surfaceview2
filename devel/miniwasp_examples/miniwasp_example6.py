@@ -2,7 +2,7 @@
 
 from typing import cast
 
-import field_slicer as fs
+# import field_slicer as fs
 import hither2 as hi
 import kachery_p2p as kp
 import numpy as np
@@ -16,6 +16,8 @@ def run_example6():
         j: hi.Job = example6_hither.run()
         x = j.wait().return_value
         print(x)
+        uri = kp.store_pkl(x)
+        print(uri)
 
 def main():
     run_example6()
