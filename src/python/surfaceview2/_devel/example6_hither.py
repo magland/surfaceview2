@@ -7,7 +7,7 @@ import numpy as np
 
 thisdir = os.path.dirname(os.path.realpath(__file__))
 @hi.function(
-    'example6_hither', '0.1.0',
+    'example6_hither', '0.1.1',
     # image=hi.DockerImageFromScript(name='magland/miniwasp', dockerfile=f'{thisdir}/docker-miniwasp/Dockerfile'),
     image=hi.RemoteDockerImage(name='magland/miniwasp', tag='0.1.5'),
     kachery_support=True
@@ -173,10 +173,12 @@ def example6_hither():
     ny = int(np.ceil((ymax-ymin)*omega/2/np.pi*ppw))
     nz = int(np.ceil((zmax-zmin)*omega/2/np.pi*ppw))
 
+    print(f'(nx, ny, nz) = ({nx}, {ny}, {nz})')
+
     xs = np.linspace(xmin+0.1*dx,xmax-0.1*dx,nx)
     ys = np.linspace(ymin+0.1*dy,ymax-0.1*dy,ny)
     zs = np.linspace(zmin+0.1*dz,zmax-0.1*dz,nz)
-    xx,yy,zz = np.meshgrid(xs,ys,zs)
+    xx,yy,zz = np.meshgrid(xs,ys,zs, indexing='ij')
 
     nt = nx*ny*nz
     targs = np.zeros((3,nt),order="F")
@@ -187,18 +189,13 @@ def example6_hither():
     #
     # Compute fields at targets using computed surface currents
     #
-    print('Compute fields at targets')
-    print('string1:', string1)
-    print('dP:', dP)
-    print('contrast_matrix:', contrast_matrix)
-    print('omega:', omega)
-    print('eps:', eps)
-    print('soln:', soln)
-    print('targs:', targs)
     E,H = mw.em_solver_wrap_postproc(string1,dP,contrast_matrix,omega,eps,soln,targs)
 
     print('Returning results')
     return {
-        'E': E,
-        'H': H
+        'xgrid': xs,
+        'ygrid': ys,
+        'zgrid': zs,
+        'E': E.reshape((3, len(xs), len(ys), len(zs))),
+        'H': H.reshape((3, len(xs), len(ys), len(zs)))
     }
