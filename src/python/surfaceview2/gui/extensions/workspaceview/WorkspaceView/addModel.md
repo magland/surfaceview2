@@ -1,3 +1,5 @@
+A *model* in surfaceview2 comprises a collection of surfaces and a collection of 3D vector fields that live in the same 3D space.
+
 To add a model to this workspace, run a Python script on the computer running the backend provider.
 
 Here is an example script that requires that you have access to a .vtk file in unstructured grid format:
@@ -27,3 +29,5 @@ M = surfaceview2.Model.deserialize('sha1://..../model.json', label='model1')
 W = surfaceview2.load_workspace('{workspaceUri}')
 W.add_model(M)
 ```
+
+In the context of the miniwasp project, you can generate a URI for a new model by running one of the [examples found here](https://github.com/magland/surfaceview2/tree/main/devel/miniwasp_examples). That will print a model URI to the console and you can use the above script to add the model to the workspace.

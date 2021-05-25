@@ -16,8 +16,19 @@ def run_example6():
         j: hi.Job = example6_hither.run()
         x = j.wait().return_value
         print(x)
-        uri = kp.store_pkl(x)
-        print(uri)
+        xgrid = x['xgrid']
+        ygrid = x['ygrid']
+        zgrid = x['zgrid']
+        H = x['H']
+        E = x['E']
+        H0 = surfaceview2.VectorField3D.from_numpy(xgrid=xgrid, ygrid=ygrid, zgrid=zgrid, values=H)
+        E0 = surfaceview2.VectorField3D.from_numpy(xgrid=xgrid, ygrid=ygrid, zgrid=zgrid, values=E)
+
+        M = surfaceview2.Model('miniwasp_example6')
+        M.add_vector_field_3d('H', H0)
+        M.add_vector_field_3d('E', E0)
+        model_uri = kp.store_json(M.serialize(), basename='miniwasp_example5.json')
+        print(f'Model URI: {model_uri}')
 
 def main():
     run_example6()
