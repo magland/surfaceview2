@@ -19,17 +19,22 @@ export type Slice = {
     ny: number
 }
 
+export type SliceInfo = {
+    plane: 'XY' | 'XZ' | 'YZ'
+    sliceIndex: number
+    minValue: number
+    maxValue: number
+}
+
 export type SampledSlice = {
     slice: Slice
-    components: string[]
-    data: (number[][])[]
+    data: number[][]
 }
 
 export type MainLayerProps = {
     width: number
     height: number
     sampledSlice: SampledSlice | undefined
-    component: string | undefined
     valueRange: {min: number, max: number}
 }
 
@@ -44,7 +49,7 @@ const handleClick: DiscreteMouseEventHandler = (event: ClickEvent, layer: Canvas
 
 export const createMainLayer = () => {
     const onPaint = (painter: CanvasPainter, props: MainLayerProps, state: LayerState) => {
-        const { sampledSlice, valueRange, width, height, component } = props
+        const { sampledSlice, valueRange, width, height } = props
         if (!sampledSlice) return
 
         const n1 = sampledSlice.slice.nx
@@ -52,19 +57,19 @@ export const createMainLayer = () => {
 
         const pixelSize = Math.min(width / n1, height/n2)
 
-        const componentIndex = sampledSlice.components.indexOf(component || '') || 0
-
         painter.wipe()
         if (!sampledSlice) return
+        if (sampledSlice.data.length !== n1) return
+        if (sampledSlice.data[0].length !== n2) return
         const imageData = painter.createImageData(width, height)
         for (let i1 = 0; i1 < width; i1 ++) {
             const x0 = Math.round(i1 / pixelSize)
-            if ((0 < x0) && (x0 < n1)) {
+            if ((0 <= x0) && (x0 < n1)) {
                 for (let i2 = 0; i2 < height; i2 ++) {
                     const y0 = Math.round(i2 / pixelSize)
-                    if ((0 < y0) && (y0 < n2)) {
-
-                        const v = sampledSlice.data[componentIndex][x0][y0]
+                    if ((0 <= y0) && (y0 < n2)) {
+                        
+                        const v = sampledSlice.data[x0][y0]
                         const v2 = (v - valueRange.min) / (valueRange.max - valueRange.min)
                         const ii = 4 * (i1 + width * i2)
                         const rgba = valToRgba(v2)

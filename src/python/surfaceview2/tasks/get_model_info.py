@@ -1,3 +1,4 @@
+import numpy as np
 import hither2 as hi
 import kachery_p2p as kp
 import surfaceview2
@@ -5,7 +6,7 @@ from ..backend import taskfunction
 from surfaceview2.config import job_cache, job_handler
 from surfaceview2.workspace_list import WorkspaceList
 
-@hi.function('get_model_info', '0.1.6')
+@hi.function('get_model_info', '0.1.8')
 def get_model_info(model_uri: str):
     model_object = kp.load_json(model_uri)
     if not model_object:
@@ -29,11 +30,12 @@ def get_model_info(model_uri: str):
             'nx': len(v.xgrid),
             'ny': len(v.ygrid),
             'nz': len(v.zgrid),
-            'dim': v.values.shape[0]
+            'dim': v.values.shape[0],
+            'valueRange': {'min': np.min(v.values.real), 'max': np.max(v.values.real)}
         }
     return ret
 
-@taskfunction('get_model_info.6')
+@taskfunction('get_model_info.8')
 def task_get_model_info(model_uri: str):
     with hi.Config(job_handler=job_handler.misc, job_cache=job_cache):
         return hi.Job(get_model_info, {'model_uri': model_uri})

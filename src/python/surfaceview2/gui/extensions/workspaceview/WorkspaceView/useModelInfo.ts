@@ -12,6 +12,7 @@ type VectorField3DInfo = {
     ny: number
     nz: number
     dim: number
+    valueRange: {min: number, max: number}
 }
 
 export type ModelInfo = {
@@ -20,7 +21,7 @@ export type ModelInfo = {
 }
 
 const useModelInfo = (modelUri: string | undefined) => {
-    const {returnValue: modelInfo, task} = useTask<ModelInfo>(modelUri ? 'get_model_info.6' : '', {model_uri: modelUri})
+    const {returnValue: modelInfo, task} = useTask<ModelInfo>(modelUri ? 'get_model_info.8' : '', {model_uri: modelUri})
     return {modelInfo, task}
 }
 

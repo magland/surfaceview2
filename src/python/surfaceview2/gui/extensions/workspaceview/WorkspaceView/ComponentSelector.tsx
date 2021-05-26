@@ -6,22 +6,26 @@ import RadioChoices from './RadioChoices';
 // }
 
 type Props = {
-  components: string[]
-  currentComponent: string | undefined
-  onCurrentComponentChanged: (c: string) => void
+  components: number[]
+  currentComponent: number | undefined
+  onCurrentComponentChanged: (c: number) => void
 }
 
 const ComponentSelector: FunctionComponent<Props> = ({ components, currentComponent, onCurrentComponentChanged }) => {
+  const handleCurrentComponentChanged = ((c: string) => {
+    if (!c) return
+    onCurrentComponentChanged(parseInt(c))
+  })
   return (
     <div>
       <RadioChoices
         label=""
-        value={currentComponent || ''}
-        onSetValue={onCurrentComponentChanged}
+        value={currentComponent + '' || ''}
+        onSetValue={handleCurrentComponentChanged}
         options={
           components.map(c => ({
-            label: c,
-            value: c,
+            label: c + '',
+            value: c + '',
             disabled: false
           }))
         }
