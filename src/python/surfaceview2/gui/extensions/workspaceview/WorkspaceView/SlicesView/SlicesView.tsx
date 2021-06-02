@@ -75,7 +75,7 @@ const SlicesView: FunctionComponent<Props> = ({nx, ny, numSlices, width, height,
             <div>
                 <pre>
                     {numSlices} slices ({nx} x {ny})<br />
-                    Current slice index: {currentSliceIndex}<br />
+                    Current slice index: {currentSliceIndex || defaultSliceIndex}<br />
                 </pre>
             </div>
         </div>
